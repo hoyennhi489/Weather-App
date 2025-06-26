@@ -16,4 +16,25 @@ document.getElementById("searchBtn").addEventListener("click", function () {
       }
       return response.json();
     })
-})
+    .then((data) => {
+      document.getElementById("weatherInfo").classList.remove("hidden");
+
+      let displayName = `${data.name}, ${data.sys.country}`;
+      if (data.name === "Turan" && data.sys.country === "VN") {
+        displayName = "Đà Nẵng, VN";
+      }
+
+      document.getElementById("cityName").textContent = displayName;
+      document.getElementById("temp").textContent = `Temperature: ${data.main.temp}°C`;
+      document.getElementById("description").textContent = `Weather: ${data.weather[0].description}`;
+
+      // Weather icon
+      const iconCode = data.weather[0].icon;
+      const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`; // dùng @4x cho icon rõ hơn
+      document.getElementById("weatherIcon").src = iconUrl;
+      document.getElementById("weatherIcon").alt = data.weather[0].description;
+    })
+    .catch((error) => {
+      alert(error.message);
+    });
+});
